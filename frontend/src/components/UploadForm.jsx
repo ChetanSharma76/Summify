@@ -33,7 +33,7 @@ export default function UploadForm({ setSummary }) {
     formData.append("prompt", prompt);
 
     try {
-      const { data } = await axios.post("/api/upload", formData, {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       
