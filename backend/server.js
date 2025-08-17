@@ -1,15 +1,38 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import uploadRoutes from "./routes/uploadRoutes.js";
+import shareRoutes from "./routes/shareRoutes.js";
+
+const app = express();
+
+// Middlewares
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use("/api/upload", uploadRoutes);
+app.use('/api/share', shareRoutes);
+
+// Health check route
+app.get("/ping", (req, res) => {
+  res.json({ message: "Server Health is good!" });
+});
+
+// Root route for Vercel
+app.get("/", (req, res) => {
+  res.json({ message: "Summify Backend API is running!" });
+});
 
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  const { default: app } = await import("./src/app.js"); 
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-};
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
-startServer();
+export default app;
