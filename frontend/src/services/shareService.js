@@ -10,7 +10,7 @@ export const shareViaEmail = async (
 ) => {
   try {
     const response = await axios.post(
-      `${API_BASE}/api/share`,
+      `${API_BASE}/api/share/email`,
       {
         recipientEmail: recipientEmail.trim(),
         summaryText,
